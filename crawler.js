@@ -1,16 +1,18 @@
+/**
+ * Created by Citrus on 2017/3/20.
+ */
 const config = require('./config');
 const express = require('express');
 const superagent = require('superagent');
 const cheerio = require('cheerio');
-const app = express();
 
 const mongo = require('./lib');
 
 // 用 superagent 去抓取 https://cnodejs.org/ 的内容
 let getUrl = 'https://cnodejs.org';
-let page = [1, 3];
+let page = [1, 2];
 let pageParam = '/?tab=all&page=';
-//let pageData = [];
+let pageData = [];
 
 //抓取页数
 for(let i = page[0]; i < (page[1] + 1); i++){
@@ -36,26 +38,7 @@ function getData(err, sres, index){
             url: $element.attr('href')
         });
     });
-    //pageData[index] = pageNode;
+    pageData[index] = pageNode;
     //写入数据库
     mongo.Post.create( pageNode ).exec();
 }
-console.log('crawler done');
-// app.get('/', function (req, res, next) {
-//
-//     //展示内容
-//     let html = '';
-//     pageData.forEach((n, i) => {
-//         n.forEach((m, j) => {
-//             html += `<h3> ${ n[j].title } </h3>`;
-//             html += `<a href="${ getUrl + n[j].url }"> 查看原文章 </a>`;
-//         });
-//     });
-//
-//     res.send(html);
-//     next();
-// });
-
-// app.listen(config.port, () => {
-//    console.log(`listening at port ${ config.port }`);
-// });
