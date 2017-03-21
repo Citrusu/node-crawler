@@ -6,23 +6,35 @@ const app = express();
 
 const mongo = require('./lib');
 
-app.get('/', function (req, res, next) {
+Post(1);
+function Post(page){
+    app.get('/', function (req, res, next) {
+        //查询数据库
+        mongo.Post
+            .find({page: page})
+            .sort({_id: 1})
+            .exec()
+            .then((val) => {
+                //res.send(val);
+                showHtml(val);
+            });
 
-    let data = mongo.Post.find({});
-    res.send(data);
-    //展示内容
-    // let html = '';
-    // pageData.forEach((n, i) => {
-    //     n.forEach((m, j) => {
-    //         html += `<h3> ${ n[j].title } </h3>`;
-    //         html += `<a href="${ getUrl + n[j].url }"> 查看原文章 </a>`;
-    //     });
-    // });
-    //
-    // res.send(html);
-    // next();
-});
+        //展示内容
+        function showHtml(data){
+            let html = '';
+            data.forEach((n, i) => {
+                // n.forEach((m, j) => {
+                html += `<h3> ${ n.title } </h3>`;
+                html += `<a href="${ config.getUrl + n.url }"> 查看原文章 </a>`;
+                // });
+            });
+            res.send(html);
+            next();
+        }
+
+    });
+}
 
 app.listen(config.port, () => {
-   console.log(`listening at port ${ config.port }`);
+    console.log(`listening at port ${ config.port }`);
 });

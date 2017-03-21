@@ -6,7 +6,8 @@ let Mongolass = require('mongolass');
 let mongolass = new Mongolass();
 mongolass.connect(config.mongodb);
 
-exports.Post = mongolass.model('post', {
+exports.Post = mongolass.model('Post', {
+    page: {type: 'number'},
     title: {type: 'string'},
     url: {type: 'string'}
 });

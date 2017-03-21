@@ -7,14 +7,11 @@ const app = express();
 const mongo = require('./lib');
 
 // 用 superagent 去抓取 https://cnodejs.org/ 的内容
-let getUrl = 'https://cnodejs.org';
-let page = [1, 3];
-let pageParam = '/?tab=all&page=';
 //let pageData = [];
 
 //抓取页数
-for(let i = page[0]; i < (page[1] + 1); i++){
-    let url = getUrl + pageParam + i;
+for(let i = config.page[0]; i < (config.page[1] + 1); i++){
+    let url = config.getUrl + config.pageParam + i;
     superagent.get(url).end(function (err, sres) {
         getData(err, sres, i);
     });
@@ -32,6 +29,7 @@ function getData(err, sres, index){
     $('#topic_list .topic_title').each(function (idx, element) {
         let $element = $(element);
         pageNode.push({
+            page: index,
             title: $element.attr('title'),
             url: $element.attr('href')
         });
@@ -41,21 +39,3 @@ function getData(err, sres, index){
     mongo.Post.create( pageNode ).exec();
 }
 console.log('crawler done');
-// app.get('/', function (req, res, next) {
-//
-//     //展示内容
-//     let html = '';
-//     pageData.forEach((n, i) => {
-//         n.forEach((m, j) => {
-//             html += `<h3> ${ n[j].title } </h3>`;
-//             html += `<a href="${ getUrl + n[j].url }"> 查看原文章 </a>`;
-//         });
-//     });
-//
-//     res.send(html);
-//     next();
-// });
-
-// app.listen(config.port, () => {
-//    console.log(`listening at port ${ config.port }`);
-// });
