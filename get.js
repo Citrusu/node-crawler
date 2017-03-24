@@ -23,15 +23,36 @@ function Post(page){
         function showHtml(data){
             let html = '';
             data.forEach((n, i) => {
-                // n.forEach((m, j) => {
                 html += `<h3> ${ n.title } </h3>`;
                 html += `<a href="${ config.getUrl + n.url }"> 查看原文章 </a>`;
-                // });
             });
             res.send(html);
             next();
         }
 
+        //显示分页
+        mongo.Post
+            .find({})
+            .sort({page: -1})
+            .limit(1)
+            .then((val) => {
+                showPage(val[0].page);
+            });
+        function showPage(max){
+            let html = '';
+            for(let i = 0; i < max; i++){
+                let idx = i + 1;
+                html += `<p>`;
+                if(idx === page){
+                    html += `<a href="${config.getUrl + config.pageParam + idx}" class="current"> ${ idx } </a>`;
+                }else{
+                    html += `<a href="${config.getUrl + config.pageParam + idx}"> ${ idx } </a>`;
+                }
+                html += `</p>`;
+            }
+            console.log(html);
+            next();
+        }
     });
 }
 

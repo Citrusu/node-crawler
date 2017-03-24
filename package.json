@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "cheerio": "^0.22.0",
+    "ejs": "^2.5.6",
     "express": "^4.15.2",
     "mongolass": "^2.4.5",
     "routes": "^2.1.0",
